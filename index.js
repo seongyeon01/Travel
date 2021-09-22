@@ -1,14 +1,33 @@
 const express = require('express')
 const app = express()
 const port = 5000
-const mongoose=require('mongoose')
+const bodyParser=require('body-parser')
+const config = require("./config/key")
+const { User } = require("./models/User")
 
-mongoose.connect('mongodb+srv://yeon:dkssudgg0119@cluster0.ncwyw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+const mongoose=require('mongoose')
+const { mongoURI } = require('./config/dev')
+mongoose.connect(mongoURI
   ,{ useNewUrlParser: true }) 
   .then(() => console.log( "MongoDB Connected success !!" ))
-  .catch(err => console.log( err ))
+  .catch(err => console.log( err )) 
+  
 app.get('/', (req, res) => {
-  res.send('Hello World! 안녕하세요')
+  res.send('Hello World! 안녕하세요 하하호호')
+})
+
+app.post('/register', (req,res) => {
+  const user = new User(req.body)
+
+    user.save((err, userInfo) => {
+        if (err) return res.json({ success: false, err });
+        return res.status(200).json({
+            success: true
+        });
+    });
 })
 
 app.listen(port, () => {
