@@ -9,6 +9,7 @@ const { auth } = require("./middleware/auth")
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser())
+
 const mongoose=require('mongoose')
 const { mongoURI } = require('./config/dev')
 mongoose.connect(mongoURI
@@ -20,10 +21,12 @@ app.get('/', (req, res) => {
   res.send('Hello World! 안녕하세요 하하호호')
 })
 
+app.get('/api/hello',(req,res)=>{
+  res.send("안녕하세요~~")
+})
+
 app.post('/register', (req,res) => {
   const user = new User(req.body)
-
-
 
     user.save((err, userInfo) => {
         if (err) return res.json({ success: false, err });
